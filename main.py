@@ -83,8 +83,12 @@ class MyCamera(Camera):
 
     def process_frame(self, frame):
         try:
-            # emb =
-            label = self.parent.children[0].children[1]
+            # # emb =
+            # print(self.parent.ids['label'])
+            # print(self.parent.children[0])
+            # print(self.parent.children[1])
+            #label = self.ids['label']#self.parent.children[0]#.children[1]
+            label = self.parent.ids['label']
             face_found, (name, score) = data = face_data.find_person(
                 frame)
             if not face_found:

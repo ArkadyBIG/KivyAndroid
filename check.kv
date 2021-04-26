@@ -81,34 +81,53 @@ WindowManager:
                 on_release: root.load(filechooser.path, filechooser.selection)
 <CameraClick>:
     name: "camera"
-    orientation: 'vertical'
+    orientation: 'vertical'    
+    
     MyCamera:
-
         id: cam0
-        size_hint: [1.,0.8]
+        size_hint: [1.,0.7]
         #resolution: 1920, 1080
         play: False
         canvas.before:
             PushMatrix
             Rotate:
-                angle: -90
+                angle: 0
+                #angle: -90
+                
                 origin: self.center
         canvas.after:
             PopMatrix
-    
 
     BoxLayout:
-        orientation: 'horizontal'
         size_hint: [1, .2]
-        Button:
-            text: "Play"
-            on_press: cam0.play = not cam0.play
-        Label:
-            text: 'text'
-            color: 1, 1, 1, 1
-        Button:
-            text: "Go Back"
-            on_press: cam0.play = False
-            on_release: app.root.current = "main" 
+        orientation: 'vertical'
 
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: [1.,0.5]
+            Button:
+                text: "Play"
+                on_press: cam0.play = not cam0.play
+            
+            Button:
+                text: "Go Back"
+                on_press: cam0.play = False
+                on_release: app.root.current = "main" 
+        Label:
+            id: label
+            size_hint: [1.,0.5]
+            text: 'text'
+            color: 1., 1, 1., 1.
+            
+            font_size: 40
+            background_color: (0.36, 0.55, 0.77, 1)
+            size: self.texture_size
+            canvas.before:
+                Color:
+                    rgba: self.background_color
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            #text_size: root.width, None
+            #size: self.texture_size
 
