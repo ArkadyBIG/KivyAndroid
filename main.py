@@ -81,9 +81,21 @@ class MyCamera(Camera):
     def process_frame(self, frame):
         try:
             # emb = 
-            
+            label = self.parent.children[0].children[1]
             face_found, (name, score) = data = self.face_data.find_person(frame)
-            self.parent.children[0].text = str(data)
+            if not face_found:
+                color = [0.1, 0.1, 0.1, 1]
+                text = 'No faces'
+            else:
+                if score != 0:
+                    text = 'BlackList'
+                    self.play = False
+                    color = [1, 0.1, 0.1, 1]
+                else:
+                    text = 'Access approved'
+                    color = [0.1, 0.1, 1, 1]
+            
+            label.text = text
             # detections = detect_faces(frame)
             # img = Image.fromarray(frame)
             # draw = ImageDraw.Draw(img)

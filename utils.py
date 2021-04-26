@@ -45,9 +45,9 @@ class Embedder:
 
         scores = (x*y).sum(axis=1)
         max_idx = scores.argmax()
-        # if scores[max_idx] > self.threshold:
-        return list(self.db.keys())[max_idx], scores[max_idx]
-        # return None, 0.
+        if scores[max_idx] > self.threshold:
+            return list(self.db.keys())[max_idx], scores[max_idx]
+        return None, 0.
     
     def find_person(self, img):
         # img is bgr picture
@@ -59,8 +59,8 @@ class Embedder:
             box = det.bbox.scale(img.shape[1::-1]).as_tuple
             x1, y1, x2, y2 = [int(i) for i in box]
             face = img[y1:y2, x1:x2]
-        
-            return True, self.find_face(face)
+            if face.size > 0:
+                return True, self.find_face(face)
         return False, (None, 0.)
         
 

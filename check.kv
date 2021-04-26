@@ -95,14 +95,17 @@ WindowManager:
                     origin: root.center
         canvas.after:
             PopMatrix
-        
+    
+
     BoxLayout:
         orientation: 'horizontal'
         size_hint: [1, .2]
         Button:
             text: "Play"
             on_press: cam0.play = not cam0.play
-
+        Label:
+            text: 'text'
+            color: 1, 1, 1, 1
         Button:
             text: "Go Back"
             on_press: cam0.play = False
