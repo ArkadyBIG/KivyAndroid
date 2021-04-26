@@ -1,0 +1,103 @@
+WindowManager:
+    MainWindow
+    UpdateWindow
+    CameraClick
+
+<MainWindow>
+    name: "main"
+    GridLayout:
+        rows:2
+        BoxLayout:
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: [0.95, .2]
+            
+            Button:
+                text: 'Track'
+                size_hint: [1, 1.]
+                on_release: app.root.current = "camera"
+            Button:
+                text:'Update'
+                size_hint: [1, 1.]
+                on_release: app.root.current = "update"
+    Label:
+        text: "main"
+
+<UpdateWindow>
+    name: "update"
+    id: update_window
+    GridLayout:
+        rows:2
+        id: grid
+        #orientation: "vertical"
+        #FileChooserListView:
+        BoxLayout:
+            orientation: 'horizontal'
+            FileChooserIconView:
+                id:filechooser
+                path: root.get_default_path()
+                filters: [root.show_only_images]
+                on_selection: update_window.selected(filechooser.selection)
+            Image:
+                id:image
+                source:""
+                
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: [0.95, .2]
+            Button:
+                text: 'Upload'
+                size_hint: [1, 1.]
+                on_release: root.show_load()
+            Button:
+                text: 'Synchronize'
+                size_hint: [1, 1.]
+                on_release: root.sync_press()
+            Button:
+                text:'Go Back'
+                size_hint: [1, 1.]
+                on_release: app.root.current = "main"
+
+
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+<CameraClick>:
+    name: "camera"
+    orientation: 'vertical'
+    MyCamera:
+        id: cam0
+        size_hint: [1.,0.8]
+        #resolution: 1920, 1080
+        play: True
+        canvas.before:
+            PushMatrix
+                Rotate:
+                    angle: -90
+                    origin: root.center
+        canvas.after:
+            PopMatrix
+        
+    Button:
+        text: 'Go Back'
+        size_hint: [1.,0.2]
+        on_release: app.root.current = "main"
+
+
