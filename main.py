@@ -42,22 +42,25 @@ def check_request_camera_permission(callback=None):
     if platform != 'android':
         return True
     from android.permissions import Permission, request_permissions, check_permission
-    permissions = [Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA]
-    
+    permissions = [Permission.READ_EXTERNAL_STORAGE,
+                   Permission.WRITE_EXTERNAL_STORAGE, Permission.CAMERA]
+
     permissions = [p for p in permissions if not check_permission(p)]
     if permissions:
         request_permissions(permissions, callback)
     return True
 
+
 class MainWindow(Screen):
     pass
 
 
+face_data = Embedder(os.getcwd() + '/BlackListImages')
 class MyCamera(Camera):
     def __init__(self, **kwargs):
         if kivy.platform == 'android':
             self.resolution = 1920 // 2, 1080 // 2
-        self.face_data = Embedder(os.getcwd() + '/BlackListImages')
+        #self.face_data = Embedder(os.getcwd() + '/BlackListImages')
         super(MyCamera, self).__init__(**kwargs)
 
     def _camera_loaded(self, *largs):
@@ -70,19 +73,20 @@ class MyCamera(Camera):
 
     def on_tex(self, *l):
         w, h = self._camera._resolution
-        frame = np.frombuffer(self._camera.texture.pixels, np.uint8).reshape(h, w, 4)[..., :3].copy()
-        
+        frame = np.frombuffer(self._camera.texture.pixels,
+                              np.uint8).reshape(h, w, 4)[..., :3].copy()
+
         frame = self.process_frame(frame)
-        
+
         self.put_frame(frame)
         super(MyCamera, self).on_tex(*l)
 
-
     def process_frame(self, frame):
         try:
-            # emb = 
+            # emb =
             label = self.parent.children[0].children[1]
-            face_found, (name, score) = data = self.face_data.find_person(frame)
+            face_found, (name, score) = data = face_data.find_person(
+                frame)
             if not face_found:
                 color = [0.1, 0.1, 0.1, 1]
                 text = 'No faces'
@@ -94,14 +98,14 @@ class MyCamera(Camera):
                 else:
                     text = 'Access approved'
                     color = [0.1, 0.1, 1, 1]
-            
+
             label.text = text
             # detections = detect_faces(frame)
             # img = Image.fromarray(frame)
             # draw = ImageDraw.Draw(img)
             # for det in detections:
             #     x1, y1, x2, y2 = det.bbox.as_tuple
-            
+
             #     shape = [int(self.texture.width*x1), int(self.texture.height*y1),
             #             int(self.texture.width*x2), int(self.texture.height*y2)]
             #     draw.rectangle(xy=shape)
@@ -115,9 +119,9 @@ class MyCamera(Camera):
             tb = [tb[i:i + 50] for i in range(0, len(tb), 50)]
             tb = '\n'.join(tb)
             self.parent.children[0].text = tb[-100:]
-        
+
         return frame
-    
+
     def put_frame(self, frame):
         buf = frame.tobytes()
         self.texture.blit_buffer(buf, colorfmt='rgb', bufferfmt='ubyte')
@@ -178,7 +182,7 @@ class UpdateWindow(Screen):
 
     def sync_press(self):
         print('h')
-        embedder.update_database()
+        face_data.update_database()
 
     def show_load(self):
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
@@ -194,8 +198,6 @@ class UpdateWindow(Screen):
 
 class WindowManager(ScreenManager):
     pass
-
-
 
 
 class MyApp(App):

@@ -74,12 +74,13 @@ class Embedder:
         for filename in images:
             emb_file = filename.split('.')[0]+'.npy'
             if emb_file not in npys:
-                print("Add", filename, 'to database')
                 path = os.path.join(self.home_folder, filename)
                 img = Image.open(path)
                 img = np.asarray(img)
                 detections = detect_faces(img)
                 if detections:
+
+                    print("Add", filename, 'to database')
                     det = max(detections, key=lambda x: x.bbox.area)
                     box = det.bbox.scale(img.shape[1::-1]).as_tuple
                     x1, y1, x2, y2 = [int(i) for i in box]
