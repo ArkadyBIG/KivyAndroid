@@ -83,10 +83,11 @@ WindowManager:
     name: "camera"
     orientation: 'vertical'
     MyCamera:
+
         id: cam0
         size_hint: [1.,0.8]
         #resolution: 1920, 1080
-        play: True
+        play: False
         canvas.before:
             PushMatrix
                 Rotate:
@@ -95,9 +96,16 @@ WindowManager:
         canvas.after:
             PopMatrix
         
-    Button:
-        text: 'Go Back'
-        size_hint: [1.,0.2]
-        on_release: app.root.current = "main"
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: [1, .2]
+        Button:
+            text: "Play"
+            on_press: cam0.play = not cam0.play
+
+        Button:
+            text: "Go Back"
+            on_press: cam0.play = False
+            on_release: app.root.current = "main" 
 
 
