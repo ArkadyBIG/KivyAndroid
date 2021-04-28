@@ -36,8 +36,8 @@ WindowManager:
             orientation: 'horizontal'
             FileChooserIconView:
                 id:filechooser
-                path: root.get_default_path()
-                filters: [root.show_only_images]
+                rootpath: root.get_default_path()
+                #filters: [root.show_only_images]
                 on_selection: update_window.selected(filechooser.selection)
             Image:
                 id:image
@@ -68,6 +68,7 @@ WindowManager:
         orientation: "vertical"
         FileChooserListView:
             id: filechooser
+             
 
         BoxLayout:
             size_hint_y: None
@@ -85,7 +86,7 @@ WindowManager:
     
     MyCamera:
         id: cam0
-        size_hint: [1.,0.7]
+        #size_hint: [1.,0.7]
         #resolution: 1920, 1080
         play: False
 
@@ -94,8 +95,8 @@ WindowManager:
         canvas.before:
             PushMatrix
             Rotate:
-                angle: 0
-                #angle: -90
+                #angle: 0
+                angle: -90
                 
                 origin: self.center
         canvas.after:
@@ -110,7 +111,7 @@ WindowManager:
             size_hint: [1.,0.5]
             Button:
                 text: "Play"
-                on_press: cam0.play = not cam0.play
+                on_release: cam0.play = not cam0.play
             
             Button:
                 text: "Go Back"
